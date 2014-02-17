@@ -27,17 +27,21 @@
 
 .district-label{fill:#cccccc;}
 
-li{
-  list-style-type: none;
-  width:200;
-  height:300 px;
-  background:#dgdgdg;
-  border:none;
-  display:inline;
+button, input {
+border: none; background: #fff;
+font-size: 14px; 
+font-family: 'Open Sans', sans-serif;
+font-size: 1em;
+font-weight: 300;
+padding: 0 20px; height: 40px;
 }
 
-li:focus{
-  background: #ffffff;
+button:hover{
+  background-color:#aaa;
+}
+
+button:focus{
+  background: #999;
   outline:none;
 }
 
@@ -49,6 +53,11 @@ font-weight: 300;
 
 #chart{
 	margin:0 100px;
+}
+
+body{
+
+/*width:1000px;*/
 }
 
 </style>
@@ -86,7 +95,7 @@ var years = {
 d3.select("div").select("ul").selectAll("li")
   .data(districtlist)
   .enter()
-  .append("li")
+  .append("button")
   .text(function(d) { return years[d]; })
   .on("click", function(d){
     // if(d != currentDistrict && !lock){
