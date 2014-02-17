@@ -29,11 +29,16 @@
 
 button, input {
 border: none; background: #fff;
-font-size: 14px; 
 font-family: 'Open Sans', sans-serif;
-font-size: 1em;
-font-weight: 300;
+font-size: 1.2em;
+font-weight: 400;
 padding: 0 20px; height: 40px;
+}
+
+p{
+font-family: 'Open Sans', sans-serif;
+font-size: 1.4em;
+font-weight: 300;
 }
 
 button:hover{
@@ -48,7 +53,7 @@ button:focus{
 h1{
 font-family: 'Open Sans', sans-serif;
 font-size: 3em;
-font-weight: 300;
+font-weight: 400;
 }
 
 #chart{
@@ -57,7 +62,7 @@ font-weight: 300;
 
 body{
 
-/*width:1000px;*/
+width:1050px;
 }
 
 </style>
@@ -67,10 +72,21 @@ body{
 
 <div id=chart>
 <h1> How Marylanders got gerrymandered</h1>
+
+<p>
+Maryland’s 3rd congressional district, the most gerrymandered in the nation, is a Rorschach test in the most literal sense. The Washington Post called it a “crazy quilt.” A local politician compared it to “blood spatter from a crime scene.” A federal judge said it reminded him of a “broken-winged pterodactyl, lying prostrate across the center of the state.” DCist suggested we ditch metaphor altogether and change the word “gerrymander” to “Marymander.”
+</p>
 <ul></ul>
+<svg></svg>
+
+<p>
+It would be an apt name. Though both parties carve up states in partisan self-interest, the Democrats dominating Maryland’s assembly are particularly aggressive—and creative—when it comes to the electoral map. In 2002, they shifted thousands of black voters from Al Wynn’s majority-minority District 4 into District 8, just to oust longtime Republican Representative Connie Morella. In 2012, they knocked out 86-year old incumbent Roscoe Bartlett by chopping his district in half and gluing it to a wealthy Democratic suburb near D.C. Bartlett lost by 20 points. Democrats now control seven of eight House seats.
+<p>
+
+
 </div>
 
-<link href='http://fonts.googleapis.com/css?family=Open+Sans:300' rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=Open+Sans:300,400' rel='stylesheet' type='text/css'>
 <script src="http://d3js.org/d3.v3.min.js"></script>
 <script src="http://d3js.org/topojson.v1.min.js"></script>
 <script src="http://d3js.org/queue.v1.min.js"></script>
@@ -131,10 +147,10 @@ currentDistrict = d;
 // ogr2ogr -f GeoJSON md103.json cd24_103.shp
 // topojson -o md103topo.json -p -- md103.json
 
-var width = 960,
-    height = 1160;
+var width = 900,
+    height = 430;
 
-var svgcanvas = d3.select("div").append("svg")
+var svgcanvas = d3.select("svg")
     .attr("width", width)
     .attr("height", height)
              .style("visibility", "visible");
@@ -155,7 +171,7 @@ var front = svgcanvas
 var projection = d3.geo.mercator()
     .scale(10000)
     .center([-77.4, 39])
-    .translate([width / 2.5, height/6]);
+    .translate([400, 170]);
 
 
 var path = d3.geo.path()
