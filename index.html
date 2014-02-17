@@ -1,3 +1,6 @@
+---
+---
+
 <!DOCTYPE html>
 <meta charset="utf-8">
 <style>
@@ -95,13 +98,13 @@ d3.json("{{ site.baseurl }}/ucla/districts093topo.json", function(error, json) {
 d3.json("{{ site.baseurl }}/ucla/districts098topo.json", function(error, json) {
 	populate(98, json);
 
-d3.json("/ucla/districts103topo.json", function(error, json) {
+d3.json("{{ site.baseurl }}/ucla/districts103topo.json", function(error, json) {
 	populate(103, json);
 
-d3.json("/ucla/districts108topo.json", function(error, json) {
+d3.json("{{ site.baseurl }}/ucla/districts108topo.json", function(error, json) {
 	populate(108, json);
 
-d3.json("/ucla/districts113topo.json", function(error, json) {
+d3.json("{{ site.baseurl }}/ucla/districts113topo.json", function(error, json) {
 	populate(113, json);
 
 
