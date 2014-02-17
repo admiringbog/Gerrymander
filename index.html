@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+.district1 { fill: #53324F; }
+.district2 { fill: #668D6E; }
+.district3 { fill: #F2E0A0; }
+.district4 { fill: #F19B7A; }
+.district5 { fill: #F0756E; }
+.district6{ fill: #DC758E; }
+.district7 { fill: #302853; }
+.district8 { fill: #55838D; }
+
+
+
+
+.district1 { fill: #53324F; }
+.district2 { fill: #668D6E; }
+.district3 { fill: #F2E0A0; }
+.district4 { fill: #F19B7A; }
+.district5 { fill: #F0756E; }
+.district6{ fill: #DC758E; }
+.district7 { fill: #302853; }
+.district8 { fill: #55838D; }
+
+
+.district-label{fill:#cccccc;}
+
+h1{
+font-family: 'Open Sans', sans-serif;
+font-size: 3em;
+font-weight: 300;
+}
+
+#chart{
+	margin:0 100px;
+}
+
+</style>
+<body>
+
+<div id=chart>
+<h1> How Marylanders got gerrymandered</h1>
+</div>
+
+
+<link href='http://fonts.googleapis.com/css?family=Open+Sans:300' rel='stylesheet' type='text/css'>
+<script src="http://d3js.org/d3.v3.min.js"></script>
+<script src="http://d3js.org/topojson.v1.min.js"></script>
+<script src="http://d3js.org/queue.v1.min.js"></script>
+
+
+<script>
+
+// ogr2ogr -f GeoJSON md103.json cd24_103.shp
+// topojson -o md103topo.json -p -- md103.json
+
+var width = 960,
+    height = 1160;
+
+var svg = d3.select("div").append("svg")
+    .attr("width", width)
+    .attr("height", height)
+    .append("g").attr("clip-path", "url(#land)");
+
+
+var projection = d3.geo.mercator()
+    .scale(10000)
+    .center([-77.4, 39])
+    .translate([width / 2.5, height/6]);
+
+
+var path = d3.geo.path()
+    .projection(projection);
+
+
+var md = new Object();
+
+function populate(i, json){
+	if(i<100){
+		j = "0"+i;
+	}else{
+		j = i
+	}
+	md[i] = json;
+	md[i].objects.districts = md[i].objects["districts" + j];
+	delete md[i].objects["districts" + j];
+}
+
+
+
+d3.json("/ucla/districts093topo.json", function(error, json) { 
+	populate(93, json);
+
+d3.json("/ucla/districts098topo.json", function(error, json) {
+	populate(98, json);
+
+d3.json("/ucla/districts103topo.json", function(error, json) {
+	populate(103, json);
+
+d3.json("/ucla/districts108topo.json", function(error, json) {
+	populate(108, json);
+
+d3.json("/ucla/districts113topo.json", function(error, json) {
+	populate(113, json);
+
+
+
+// END OF THE SERIAL DATA CALLS (2.0: parallelize this)
+  svg.append("defs").append("clipPath").append("path")
+  	  .datum(topojson.feature(md[98], md[98].objects.districts))
+      .attr("id", "land98")
+      .attr("d", path);
+
+ 	 svg.append("defs").append("clipPath")
+   .attr("id", "land")
+  		.append("path")
+     // .attr("clip-path", "url(#land98)")
+  	  .datum(topojson.feature(md[108], md[108].objects.districts))
+      .attr("d", path);
+
+  svg.append("clipPath")
+      .attr("id", "clip-land")
+      .append("use")
+      .attr("xlink:href", "#land");
+
+
+
+   // svg.append("text")
+   // .text("How Marylanders got gerrymandered")
+   // .attr("x", 0)
+   //    .attr("y", 300)
+   //    .attr("class", "title");
+
+
+var districtlist = [93,98, 103, 108,113];
+
+var districts = districtlist;
+
+function scrollYears(){
+	console.log(districts);
+	if(!districts.length){
+		districts = districtlist;
+	}
+	lol = districts.shift();
+	mapDistrict(md[lol]);
+	console.log(lol)
+}
+
+scrollYears();
+setInterval(function() {
+	scrollYears();
+}, 4000);
+
+
+//End of main callback area
+
+});
+});
+});
+});
+});
+
+
+
+
+
+// d3.json("us113topo.json", function(error, json) { 
+// 	md[113] = json;
+// 	md[113].objects.districts = md[113].objects.us113;
+//     delete md[113].objects.us113;
+
+// // ugly and inefficient remapping of keys
+//     for (var i = md[113].objects.districts.geometries.length - 1; i >= 0; i--) {
+//     	console.log(i);
+//     	md[113].objects.districts.geometries[i].properties.CD = md[113].objects.districts.geometries[i].properties.CD113FP;
+//     	delete md[113].objects.districts.geometries[i].properties.CD113FP;
+//     	console.log(md[113].objects.districts.geometries[i].properties.CD);
+//     };
+
+
+//     d3.json("md103topo.json", function(error, json) {
+// 	md[103] = json;
+// 	md[103].objects.districts = md[103].objects.md103;
+//     delete md[103].objects.md103;
+
+//     mapDistrict(md[113]);
+
+// });
+
+// });
+
+
+
+function mapDistrict(stateSession){
+	map = svg
+	//	.attr("clip-path", "url(#clip-land)")
+		.selectAll(".district")
+
+	//	.data(topojson.feature(stateSession, stateSession.objects.districts).features, function(d) { console.log(d.properties.DISTRICT); return parseInt(d.properties.DISTRICT); });
+	.data(topojson.feature(stateSession, stateSession.objects.districts).features, function(d) { return parseInt(d.properties.ID); });
+
+	// update
+	map	
+		.attr("class", function(d) {console.log("update!!"); return "district district" + parseInt(d.properties.DISTRICT); })
+    	.attr("d", path);
+
+    //enter
+    map.enter()
+    	.append("path")
+		.attr("class", function(d) { console.log("enter!!!"); return "district district" + parseInt(d.properties.DISTRICT); })
+     	.attr("d", path)
+      	.attr("opacity",1e-6)
+  		.transition()
+  		.duration(800)
+      	.style("opacity",1);
+
+
+   	 map.exit()
+   	 	.transition()
+   		.delay(900)
+   	 	.remove();
+
+
+// svg.selectAll(".district-label")
+//     .data(topojson.feature(stateSession, stateSession.objects.districts).features, function(d) { return parseInt(d.properties.ID); })
+//   	.enter().append("text")
+//     .attr("class", function(d) { return "district-label " + parseInt(d.properties.DISTRICT); })
+//     .attr("transform", function(d) { return "translate(" + path.centroid(d) + ")"; })
+//     .attr("dy", ".35em")
+//     .text(function(d) { return parseInt(d.properties.DISTRICT); });
+
+
+
+}
+
+
+
+
+
+
+
+  // svg.append("path")
+  //     .datum(topojson.feature(state, state.objects.md103))
+  //     .attr("d", path);
+
+    </script>
