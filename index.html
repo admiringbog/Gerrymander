@@ -14,19 +14,27 @@
 .district8 { fill: #55838D; }
 
 
+/*.c93{visibility:hidden;}
+.c98{visibility:hidden;}
+.c103{visibility:hidden;}
+.c108{visibility:hidden;}
+.c113{visibility:visible;}*/
 
-
-.district1 { fill: #53324F; }
-.district2 { fill: #668D6E; }
-.district3 { fill: #F2E0A0; }
-.district4 { fill: #F19B7A; }
-.district5 { fill: #F0756E; }
-.district6{ fill: #DC758E; }
-.district7 { fill: #302853; }
-.district8 { fill: #55838D; }
 
 
 .district-label{fill:#cccccc;}
+
+button{
+  width:200;
+  height:300 px;
+  background:#dgdgdg;
+  border:none;
+}
+
+button:focus{
+  background: #ffffff;
+  outline:none;
+}
 
 h1{
 font-family: 'Open Sans', sans-serif;
@@ -41,18 +49,65 @@ font-weight: 300;
 </style>
 <body>
 
+
+
 <div id=chart>
 <h1> How Marylanders got gerrymandered</h1>
 </div>
-
 
 <link href='http://fonts.googleapis.com/css?family=Open+Sans:300' rel='stylesheet' type='text/css'>
 <script src="http://d3js.org/d3.v3.min.js"></script>
 <script src="http://d3js.org/topojson.v1.min.js"></script>
 <script src="http://d3js.org/queue.v1.min.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
 
 
 <script>
+
+var lock = false;
+var currentDistrict;
+var districtlist = [93,98, 103, 108,113];
+
+var years = {
+ 93:"1972-1982",
+ 98:"1982-1992",
+ 103:"1992-2002",
+108:"2002-2012",
+113:"2012-present"
+
+};
+
+d3.select("div").selectAll("button")
+  .data(districtlist)
+  .enter()
+  .append("button")
+  .text(function(d) { return years[d]; })
+  .on("click", function(d){
+    // if(d != currentDistrict && !lock){
+        // svg.selectAll(".district")
+        // .transition()
+        // .delay(300)
+        // .duration(800)
+        // .style("opacity",0)
+        // .style("visibility","hidden");
+
+    // svg.select(".front").append(svg.
+    //   selectAll(".c"+d))
+    // .style("visibility","visible")
+    // .style("opacity",1e-6)
+    // .transition()
+    // .duration(800)
+    // .style("opacity",1);
+    // // }
+  console.log(d);
+ 
+$(".c"+d).each(function(){
+$(this).appendTo("#front").hide().fadeIn();
+});
+  })
+
+
+
 
 // ogr2ogr -f GeoJSON md103.json cd24_103.shp
 // topojson -o md103topo.json -p -- md103.json
@@ -60,10 +115,22 @@ font-weight: 300;
 var width = 960,
     height = 1160;
 
-var svg = d3.select("div").append("svg")
+var svgcanvas = d3.select("div").append("svg")
     .attr("width", width)
     .attr("height", height)
-    .append("g").attr("clip-path", "url(#land)");
+             .style("visibility", "visible");
+
+
+var svg = svgcanvas
+    .append("g").attr("clip-path", "url(#land)")
+    .attr("class", "back")
+        // .style("visibility", "hidden");
+
+var front = svgcanvas
+    .append("g").attr("clip-path", "url(#land)")
+    .attr("id", "front")
+             .style("visibility", "visible");
+
 
 
 var projection = d3.geo.mercator()
@@ -134,25 +201,32 @@ d3.json("{{ site.baseurl }}/ucla/districts113topo.json", function(error, json) {
    //    .attr("y", 300)
    //    .attr("class", "title");
 
+for(i = 0; i<districtlist.length;i++){
+  mapDistrict(districtlist[i]);
 
-var districtlist = [93,98, 103, 108,113];
-
-var districts = districtlist;
-
-function scrollYears(){
-	console.log(districts);
-	if(!districts.length){
-		districts = districtlist;
-	}
-	lol = districts.shift();
-	mapDistrict(md[lol]);
-	console.log(lol)
 }
 
-scrollYears();
-setInterval(function() {
-	scrollYears();
-}, 4000);
+// var districts = districtlist;
+
+mapDistrict(93);
+// for(i = 0; i<districtlist.length;i++){
+
+// }
+
+// function scrollYears(){
+// 	console.log(districts);
+// 	if(!districts.length){
+// 		districts = districtlist;
+// 	}
+// 	lol = districts.shift();
+// 	mapDistrict(md[lol]);
+// 	console.log(lol)
+// }
+
+// scrollYears();
+// setInterval(function() {
+// 	scrollYears();
+// }, 4000);
 
 
 //End of main callback area
@@ -194,7 +268,10 @@ setInterval(function() {
 
 
 
-function mapDistrict(stateSession){
+function mapDistrict(congressNumber){
+  lock = true;
+        currentDistrict = congressNumber;
+  stateSession=md[congressNumber];
 	map = svg
 	//	.attr("clip-path", "url(#clip-land)")
 		.selectAll(".district")
@@ -203,25 +280,29 @@ function mapDistrict(stateSession){
 	.data(topojson.feature(stateSession, stateSession.objects.districts).features, function(d) { return parseInt(d.properties.ID); });
 
 	// update
-	map	
-		.attr("class", function(d) {console.log("update!!"); return "district district" + parseInt(d.properties.DISTRICT); })
-    	.attr("d", path);
+	// map	
+	// 	.attr("class", function(d) {console.log("update!!"); return "district district" + parseInt(d.properties.DISTRICT); })
+ //    	.attr("d", path);
 
     //enter
     map.enter()
     	.append("path")
-		.attr("class", function(d) { console.log("enter!!!"); return "district district" + parseInt(d.properties.DISTRICT); })
+		  .attr("class", function(d) { console.log("enter!!!"); return "district c" + congressNumber + " district" + parseInt(d.properties.DISTRICT); })
      	.attr("d", path)
-      	.attr("opacity",1e-6)
-  		.transition()
-  		.duration(800)
-      	.style("opacity",1);
+    //   	.attr("opacity",1e-6)
+  		// .transition()
+  		// .duration(200)
+    //   	.style("opacity",1)
+        // .each("end", function(){lock = false;})
 
 
-   	 map.exit()
-   	 	.transition()
-   		.delay(900)
-   	 	.remove();
+   	 // map.exit()
+   	 // 	.transition()
+   		// .delay(200)
+   	 // 	.remove();
+
+
+//set record for debouncing buttons
 
 
 // svg.selectAll(".district-label")
