@@ -178,13 +178,13 @@ function changeButtonState(d){
   if(d!=currentCongress){
 
     $(".c"+d).each(function(){
-    $(this).appendTo("#front").hide().fadeIn();
-    });
+    $(this).appendTo("#front").hide().fadeIn(700);
+    })
 
-    $(".focus3elem"+".f"+currentCongress).fadeOut();
+    $(".focus3elem"+".f"+currentCongress).fadeOut(1100);
 
     sel = ".focus3elem" +".f"+d;
-    $(sel).appendTo("#focus3").hide().fadeIn();
+    $(sel).appendTo("#focus3").hide().fadeIn(700);
 
     $("#b"+d).addClass("selected");
 
