@@ -12,26 +12,20 @@
 .district4 { fill: #F19B7A; }
 .district5 { fill: #F0756E; }
 .district6{ fill: #DC758E; }
-.district7 { fill: #302853; }
 .district7 { fill: #454980; }
-
-
 .district8 { fill: #55838D; }
+
+
+.district:hover { fill: #444; }
+
 
 
 .focus3elem { fill: #F2E0A0; }
 
-/*.c93{visibility:hidden;}
-.c98{visibility:hidden;}
-.c103{visibility:hidden;}
-.c108{visibility:hidden;}
-.c113{visibility:visible;}*/
-
-
 
 .district-label{fill:#cccccc;}
 
-button, input {
+button {
 border: none; background: #fff;
 font-family: 'Open Sans', sans-serif;
 font-size: 1.2em;
@@ -55,6 +49,9 @@ button:hover{
   background-color:#ccc;
 }
 
+button:focus {
+    outline: none;
+}
 button.selected{
   background-color:#aaa;
 }
@@ -78,6 +75,51 @@ body{
 width:1050px;
 }
 
+.qtip {
+position: absolute;
+left: -28000px;
+top: -28000px;
+display: none;
+max-width: 280px;
+min-width: 50px;
+font-size: 10.5px;
+line-height: 12px;
+direction: ltr;
+box-shadow: none;
+padding: 0;
+border-style: none;
+
+}
+
+
+
+
+.mapLabel .qtip-content{
+opacity: .7;
+
+
+
+}
+
+.mapLabel .qtip-content a{
+font-family: 'Open Sans', sans-serif;
+font-size: 3em;
+font-weight: 700;
+opacity: .8;
+color:#fff;
+vertical-align:bottom;
+text-align: left;
+float:left;
+background-color:#000;
+width:55px;
+height:15px;
+padding:10px 10px;
+}
+
+
+.qtip-tip{
+  visibility: hidden;
+}
 </style>
 <body>
 
@@ -87,7 +129,7 @@ width:1050px;
 <h1> How Marylanders got gerrymandered</h1>
 
 <p>
-Maryland’s 3rd congressional district, the most gerrymandered in the nation, is a Rorschach test in the most literal sense. The Washington Post called it a “crazy quilt.” A local politician compared it to “blood spatter from a crime scene.” A federal judge said it reminded him of a “broken-winged pterodactyl, lying prostrate across the center of the state.” DCist suggested we ditch metaphor altogether and change the word “gerrymander” to “Marymander.”
+Maryland’s 3rd congressional district, the most gerrymandered in the nation, is a Rorschach test in the most literal sense. <em> The Washington Post </em> called it a “crazy quilt.” A local politician compared it to “blood spatter from a crime scene.” A federal judge said it reminded him of a “broken-winged pterodactyl, lying prostrate across the center of the state.” DCist suggested we ditch metaphor altogether and change the word “gerrymander” to “Marymander.”
 </p>
 <ul></ul>
 <svg></svg>
@@ -99,12 +141,14 @@ It would be an apt name. Though both parties carve up states in partisan self-in
 
 </div>
 
-<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300' rel='stylesheet' type='text/css'>
-<link href='http://fonts.googleapis.com/css?family=PT+Serif' rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=Open+Sans:700,300' rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=PT+Serif:400,400italic' rel='stylesheet' type='text/css'>
 <script src="http://d3js.org/d3.v3.min.js"></script>
 <script src="http://d3js.org/topojson.v1.min.js"></script>
 <script src="http://d3js.org/queue.v1.min.js"></script>
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<!-- <link href='http://cdn.jsdelivr.net/qtip2/2.2.0/jquery.qtip.min.css' rel='stylesheet' type='text/css'> -->
+<script src="http://cdn.jsdelivr.net/qtip2/2.2.0/jquery.qtip.min.js"></script>
 
 
 <script>
@@ -145,9 +189,12 @@ function changeButtonState(d){
     $(sel).appendTo("#focus3").hide().fadeIn();
 
     $("#b"+d).addClass("selected");
+
     console.log("b"+d);
     $("#b"+currentCongress).removeClass("selected");
     currentCongress = d;
+
+
   }
 } //end of button fn
 
@@ -259,6 +306,8 @@ for(i = 0; i<districtlist.length;i++){
 
 }
 
+
+
 focus3.append("rect")
       .style("fill", "#F7F8FF")
      .attr("x", 30)
@@ -348,6 +397,23 @@ $("svg").hide().fadeIn();
 
 // });
 
+function numberGrammar(num){
+  switch(num)
+{
+case 1:
+  return "1st";
+case 2:
+  return "2nd";
+case 3:
+  return "3rd";
+default:
+  return ""+num+"th";
+}
+
+}
+
+
+
 
 
 function mapDistrict(congressNumber){
@@ -368,7 +434,25 @@ function mapDistrict(congressNumber){
     //enter
     map.enter()
     	.append("path")
-		  .attr("class", function(d) { console.log("enter!!!"); return "district c" + congressNumber + " district" + parseInt(d.properties.DISTRICT); })
+		  .attr("class", function(d) { 
+
+                $(this).qtip({
+                  content: {
+                    text: function(){return "<a>"+numberGrammar(parseInt(d.properties.DISTRICT))+"</a>";}
+                  },
+                  position: {
+                     target: 'mouse', // Track the mouse as the positioning target
+                     adjust: { x: 10, y: 10 } // Offset it slightly from under the mouse
+                  },
+                style:{
+                  classes: 'mapLabel'
+                }
+
+                });
+                
+                return "district c" + congressNumber + " district" + parseInt(d.properties.DISTRICT); 
+                                    })
+
       .attr("id", function(d) { console.log("enter!!!");
 
           if(parseInt(d.properties.DISTRICT) == 3){
