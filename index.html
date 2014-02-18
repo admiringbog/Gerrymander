@@ -135,7 +135,7 @@ Maryland’s 3rd congressional district, the most gerrymandered in the nation, i
 <svg></svg>
 
 <p>
-It would be an apt name. Though both parties carve up states in partisan self-interest, the Democrats dominating Maryland’s assembly are particularly aggressive—and creative—when it comes to the electoral map. In 2002, just to oust longtime Republican Representative Connie Morella, they shifted thousands of black voters from Al Wynn’s District 4 into District 8. In 2012, they knocked off 86-year old incumbent Roscoe Bartlett by chopping his district in half and gluing it to a wealthy Democratic suburb near D.C. Bartlett lost by 20 points, and Democrats now control seven of eight House seats.
+It would be an apt name. Though both parties carve up states in partisan self-interest, the Democrats dominating Maryland’s assembly are particularly aggressive—and creative—when it comes to the electoral map. In 2002, just to oust longtime Republican Representative Connie Morella, they shifted thousands of black voters from Al Wynn’s District 4 into District 8. In 2012, they knocked off 86-year old incumbent Roscoe Bartlett by chopping his district in half and gluing it to a wealthy Democratic suburb near D.C. Bartlett lost in District 6 by 20 points, and Democrats now control seven of eight House seats.
 <p>
 
 
@@ -181,10 +181,9 @@ function changeButtonState(d){
     $(this).appendTo("#front").hide().fadeIn();
     });
 
-    $(".focus3elem").hide();
+    $(".focus3elem"+".f"+currentCongress).fadeOut();
 
     sel = ".focus3elem" +".f"+d;
-    console.log(sel);
     $(sel).appendTo("#focus3").hide().fadeIn();
 
     $("#b"+d).addClass("selected");
@@ -192,6 +191,7 @@ function changeButtonState(d){
     console.log("b"+d);
     $("#b"+currentCongress).removeClass("selected");
     currentCongress = d;
+
 
 
   }
