@@ -6,6 +6,28 @@
  <meta name="description" content="gerrymandering for fun">
 <style>
 
+/*.district1:hover { fill: #53324F; }
+.district2:hover { fill: #668D6E; }
+.district3:hover { fill: #FADD75; }
+.district4:hover { fill: #F19B7A; }
+.district5:hover { fill: #F0756E; }
+.district6:hover { fill: #DC758E; }
+.district7:hover { fill: #454980; }
+.district8:hover { fill: #55838D; }
+
+.district1 { fill: #665364; }
+.district2 { fill: #728A77; }
+.district3 { fill: #F2E0A0; }
+.district4 { fill: #E6B09C; }
+.district5 { fill: #D48787; }
+.district6{ fill: #D496A5; }
+.district7 { fill: #545775; }
+.district8 { fill: #5F7C82; }
+*/
+
+/*.district:hover { fill: #333; }*/
+
+
 .district1 { fill: #53324F; }
 .district2 { fill: #668D6E; }
 .district3 { fill: #F2E0A0; }
@@ -17,7 +39,6 @@
 
 
 .district:hover { fill: #333; }
-
 
 
 .focus3elem { fill: #F2E0A0; }
@@ -135,7 +156,7 @@ Maryland’s 3rd congressional district, the most gerrymandered in the nation, i
 <svg></svg>
 
 <p>
-It would be an apt name. Though both parties carve up states in partisan self-interest, the Democrats dominating Maryland’s assembly are particularly aggressive—and creative—when it comes to the electoral map. In 2002, just to oust longtime Republican Representative Connie Morella, they shifted thousands of black voters from Al Wynn’s District 4 into District 8. In 2012, they knocked off 86-year old incumbent Roscoe Bartlett by chopping his district in half and gluing it to a wealthy Democratic suburb near D.C. Bartlett lost in District 6 by 20 points, and Democrats now control seven of eight House seats.
+The name would be apt. Though both parties carve up states in partisan self-interest, the Democrats dominating Maryland’s assembly are particularly aggressive—and creative—when it comes to the electoral map. In 2002, just to oust longtime Republican Representative Connie Morella, they shifted thousands of black voters from Al Wynn’s District 4 into District 8. In 2012, they knocked off 86-year old incumbent Roscoe Bartlett by chopping his district in half and gluing it to a wealthy Democratic suburb near D.C. Bartlett lost in District 6 by 20 points, and Democrats now control seven of eight House seats.
 <p>
 
 
@@ -459,8 +480,6 @@ function mapDistrict(congressNumber){
           }})
      	.attr("d", path);
 
-
-console.log(congressNumber);
 
        // svg.append("path")
        // .attr("class", "c" + congressNumber)
